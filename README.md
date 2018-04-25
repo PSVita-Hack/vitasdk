@@ -1,6 +1,8 @@
 # vitasdk
 VITASDK for OS X
 
+add some dependencies and some stubs
+
 ## Install
 
 ```shell
