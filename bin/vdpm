@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# vitasdk package manager
+# (aka a 5 liner around tar and curl)
+#
+
+set -e
+set -o errtrace
+
+error() {
+  echo ""
+  echo "Failed to install, the package probably does not exist."
+  exit 1
+}
+
+install_pkg() {
+  echo "Installing $1..."
+  if [ -f $1 ]; then
+    tar -C $VITASDK/arm-vita-eabi -Jxvf $1
+  else
+    curl http://dl.vitasdk.org/$1.tar.xz | tar -C $VITASDK/arm-vita-eabi -Jxvf -
+  fi
+  echo "success"
+}
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: ./vdpm package-name"
+    exit 1
+fi
+
+if [ -z "$VITASDK" ]; then
+  echo '$VITASDK is not set'
+  exit 1
+fi
+
+trap 'error' ERR
+install_pkg $1
